@@ -1,0 +1,51 @@
+<form action="" id="formAddProduct" class="text-center">
+    <input type="text" id="nameInput" placeholder="Enter Name">
+    <br><br>
+    <input type="text" id="photoInput" placeholder="Enter Photo Address">
+    <br><br>
+    <input type="number" id="priceInput" name="price" step="0.01" min="0" max="10000" placeholder="0.00">
+    <br><br>
+    <select id="allCategoriesOption">
+    </select>
+    <br>
+    <br>
+    <button id="addProdToDbBtn" class="btn btn-info">ADD</button>
+</form>
+
+
+
+<script>
+    $(document).ready(()=>{
+        let select = $('#allCategoriesOption')
+        $.get('http://localhost:3000/admin/category',(categories)=>{
+            categories.forEach(c => {
+                select.append(
+                    `
+                    <option>${c.name}</option>
+                    `
+                )
+            });
+        })
+        $('#addProdToDbBtn').click((e)=>{
+            e.preventDefault();
+            $.post('http://localhost:3000/admin/product',{
+                name: $('#nameInput').val(),
+                price:$('#priceInput').val(),
+                category : $('#allCategoriesOption').val(),
+                photoURL :$('#photoInput').val()
+            })
+            $('#nameInput').val('');
+            $('#priceInput').val('');
+            $('#photoInput').val('');
+        })
+        
+        
+    })
+</script>
+
+<style>
+   #formAddProduct {
+    margin:20px;
+    padding: 20px;
+   }
+</style>

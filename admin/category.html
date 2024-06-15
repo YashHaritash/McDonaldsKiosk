@@ -1,0 +1,29 @@
+
+<form id="formId">
+    <div class="mb-3">
+        <label for="inputCategory" class="form-label">Enter new Category</label>
+        <input type="text" class="form-control" id="inputCategory" aria-describedby="inputCategory">
+    </div>
+    
+    <button class="btn btn-primary" id="btnAddCategory">Add</button> 
+</form>
+
+    
+
+<style>
+    #formId{
+        margin: 20px;
+    }
+</style>
+
+<script>
+    $('#btnAddCategory').click((e)=>{
+        e.preventDefault();
+        $.post('http://localhost:3000/admin/category',{
+            name:$('#inputCategory').val()
+        }).done(()=>{alert("Added")}).fail(()=>{alert("Not Added")})
+        $('#inputCategory').val('')
+    })
+</script>
+
+

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Independent Scrolling Sections</title>
+    <style>
+        .section {
+            height: 100vh;
+            background-color: aqua;
+            overflow-y: auto;
+        }
+        .row {
+            margin: 0;
+        }
+    </style>
+    <!-- Ensure you include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-2 section" id="category">Category
+
+        </div>
+        <div class="col-7 section" id="hero">
+            <div id="container" class="row" ></div>
+        </div>
+        <div class="col-3 section" id="cart"></div>
+    </div>
+
+    <script>
+        
+        $(document).ready(function() {
+            // $('#hero').load('burgers.html');
+            
+            let chosenCategory = 'Burgers'
+            
+            function loadData(chosenCategory){
+                $('#container').empty();
+                $.get('http://localhost:3000/admin/product',(products)=>{
+                    products.forEach((p)=> {
+
+                        if(p.category === chosenCategory){
+                            $('#container').append(
+                                `
+                                <div class="card col-4" style="width: 18rem;">
+                                    <img class="card-img-top" src="${p.photoURL}" height="200px" width ="100px" alt="Card image cap">
+                                    <div class="card-body">
+                                    <h5 class="card-title" id="product${p.id}">${p.name}</h5>
+                                    <p class="card-text">${p.price}</p>
+                                    <a href="#" class="btn btn-primary" id="btn${p.id}">Add</a>
+                                    </div>
+                                </div>
+                                
+                                `
+                            )
+                            
+                            
+                        }
+
+
+                        
+                    });
+                })
+            }
+
+            loadData(chosenCategory);
+            
+
+            $.get('http://localhost:3000/admin/category',(categories)=>{
+                categories.forEach((c)=> {
+                    $('#category').append(
+                        `   
+                            <div>
+                                <br>
+                                <button id="${c.name}123">${c.name}</button>
+                                <br>
+                            </div>
+                            
+ 
+                        `
+                    )
+
+                    $(`#${c.name}123`).click(()=>{
+                        chosenCategory = `${c.name}`;
+                        console.log(chosenCategory);
+                        loadData(chosenCategory);
+                    })
+                });
+            })
+
+            $('#cart').load('cart.html');
+
+            $(document).on('click', '.btn-primary', function(e) {
+
+                e.preventDefault();
+                var cardTitle = $(this).closest('.card').find('.card-title').text();
+                var cart = JSON.parse(localStorage.getItem('cart'));
+                if (cart[cardTitle]) {
+                cart[cardTitle]++;
+                } else {
+                cart[cardTitle] = 1;
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                // console.log('Cart updated:', cart);
+                // console.log(window.localStorage.cart)
+                $('#cart').load('cart.html');
+            });
+
+            // $('#burger').click(() => {
+            //     $('#hero').load('burgers.html');
+            // });
+
+            // $('#meal').click(() => {
+            //     $('#hero').load('meals.html');
+            // });
+
+            // $('#drink').click(() => {
+            //     $('#hero').load('drinks.html');
+            // });
+
+            
+        });
+    </script>
+</body>
+</html>
