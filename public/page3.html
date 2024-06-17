@@ -25,13 +25,17 @@
         <div class="col-7 section" id="hero">
             <div id="container" class="row" ></div>
         </div>
-        <div class="col-3 section" id="cart"></div>
+        <div class="col-3 section" >
+            <div class="row-11" id="cart"></div>
+            <div class="row-1"><button class="btn btn-secondary" id="nextPlaceOrder">Place Order</button></div>
+        </div>
     </div>
 
     <script>
         
         $(document).ready(function() {
             // $('#hero').load('burgers.html');
+            
             
             let chosenCategory = 'Burgers'
             
@@ -108,17 +112,11 @@
                 $('#cart').load('cart.html');
             });
 
-            // $('#burger').click(() => {
-            //     $('#hero').load('burgers.html');
-            // });
 
-            // $('#meal').click(() => {
-            //     $('#hero').load('meals.html');
-            // });
-
-            // $('#drink').click(() => {
-            //     $('#hero').load('drinks.html');
-            // });
+            $('#nextPlaceOrder').click(()=>{
+                        
+                loadPage4();
+            })
 
             
         });

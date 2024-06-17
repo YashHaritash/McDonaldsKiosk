@@ -5,34 +5,41 @@
         <th scope="col">#</th>
         <th scope="col">Item</th>
         <th scope="col">Quantity</th>
-        <th scope="col">Total</th>
+        <th scope="col">Sub Total</th>
       </tr>
     </thead>
     <tbody id="tableContent">
-
     </tbody>
 </table>
 
 <script>
+    var price = {};
+     $.get('http://localhost:3000/admin/product', (products) => {
+            products.forEach(product => {
+                price[product.name] = parseFloat(product.price);
+            });
+
     $(() => {
         let cart = JSON.parse(window.localStorage.getItem('cart'));
-        // console.log(window.localStorage.cart);
-        // console.log(cart);
-        let counter = 1;
-        for (let key in cart) {
-            
-            let child = `
-                <tr>
-                    <th scope="row">${counter++}</th>
-                    <td>${key}</td>
-                    <td>${cart[key]}</td>
-                    <td>${49*Number(cart[key])}.00</td>
-                </tr>
-            `;
+     
 
-            $('#tableContent').append(child);
-        }
+       
+            let counter = 1;
+            for (let key in cart) {
+                let total = (price[key] * Number(cart[key])).toFixed(2);
+      
+                let child = `
+                    <tr>
+                        <th scope="row">${counter++}</th>
+                        <td>${key}</td>
+                        <td>${cart[key]} x ${price[key]}</td>
+                        <td>${total}</td>
+                    </tr>
+                `;
+                
+                $('#tableContent').append(child);
+            }
 
-        
+        });
     });
 </script>
